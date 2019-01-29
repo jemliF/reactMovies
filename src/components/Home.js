@@ -4,20 +4,34 @@ import { connect } from 'react-redux';
 import { fetchMovies } from '../store/actions/movieActions';
 import MovieList from './movies/MovieList';
 class Home extends Component {
-  componentWillMount(){
+  constructor(props) {
+    super(props);
+    this.state = {
+      movies: []
+    }
+  }
+  componentWillMount() {
     console.log('componentWillMount');
     this.props.fetchMovies();
   }
 
-  componentDidMount(){
+  componentDidMount() {
     console.log('componentDidMount');
-    this.props.fetchMovies();
+  }
+
+  componentDidUpdate() {
+    console.log('componentDidMount');
+  }
+
+  componentWillReceiveProps(newProps) {
+    console.log(newProps);
+    /* this.propsUpdates.next(newProps) */
   }
   render() {
     let movies = this.props.movies;
     return (
       <div className="row" >
-        <MovieList movies={this.props.movies}></MovieList>
+        <MovieList movies={movies}></MovieList>
       </div>
     )
   }
@@ -31,7 +45,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchMovies: (name) => {
+    fetchMovies: () => {
       dispatch(fetchMovies());
     }
   };

@@ -2,18 +2,30 @@ import React, { Component } from 'react'
 import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { fetchActors } from '../../store/actions/actorActions';
+import { createMovie } from '../../store/actions/movieActions';
 class NewMovie extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            title: null,
-            releaseDate: null,
-            description: null
+            newMovie: {
+                title: null,
+                releaseDate: null,
+                description: null,
+                actors: []
+            }
         }
     }
     componentWillMount() {
         console.log('componentWillMount');
         this.props.fetchActors();
+    }
+    handleChange = (event) => {
+        this.setState({...this.state, newMovie: {...this.state.newMovie, [event.target.id]: event.target.value} });
+    }
+    handleSubmit = (event) => {
+        event.preventDefault();
+        this.props.createMovie(this.state.newMovie);
+        this.props.history.push('/')
     }
     render() {
         const formStyle = {
@@ -30,48 +42,42 @@ class NewMovie extends Component {
                 <div className="col-sm-6">
                     <div>
                         <label className="form-control-label" htmlFor="title">Title</label>
-                        <input className="form-control" id="title" name="title" type="text" required minLength="4" />
+                        <input className="form-control" id="title" name="title" type="text" required minLength="4" onChange={this.handleChange} />
                         <div>
-                            <div className="text-danger">Title is required!
-              </div>
-                            <div className="text-danger">
-                                Title must be at least 4 characters long.
-              </div>
+                            <div className="text-danger">Title is required!</div>
+                            <div className="text-danger">Title must be at least 4 characters long.</div>
                         </div>
                     </div>
                     <div className="form-group">
                         <label className="form-control-label" htmlFor="release-date">Release Date</label>
-                        <input className="form-control" id="release-date" name="release-date" type="date" />
+                        <input className="form-control" id="releaseDate" name="releaseDate" type="date" onChange={this.handleChange} />
                     </div>
                     <div className="form-group">
                         <label className="form-control-label" htmlFor="description">Description</label>
-                        <textarea className="form-control" id="description" name="description" rows="3" minLength="10">
+                        <textarea className="form-control" id="description" name="description" rows="3" minLength="10" onChange={this.handleChange}>
                         </textarea>
                         <div >
-                            <div className="text-danger">Description is required!
-            </div>
-                            <div className="text-danger">
-                                Description must be at least 10 characters long.
-            </div>
+                            <div className="text-danger">Description is required!</div>
+                            <div className="text-danger">Description must be at least 10 characters long.</div>
                         </div>
                     </div>
                     <label>Actors</label>
                     <ul className="list-group">
-                    {
-                        this.props.actors && this.props.actors.map(actor => {
-                            return <li className="list-group-item d-flex justify-content-between align-items-center">
-                            {actor.firstName + '' + actor.lastName}
-                            <span className="badge badge-pill badge-primary" style={cursorStyle}>Remove</span>
-                        </li>
-                        })
-                    }
+                        {
+                            this.props.actors && this.props.actors.map(actor => {
+                                return <li className="list-group-item d-flex justify-content-between align-items-center">
+                                    {actor.firstName + '' + actor.lastName}
+                                    <span className="badge badge-pill badge-primary" style={cursorStyle}>Remove</span>
+                                </li>
+                            })
+                        }
                     </ul>
-                    <button className="btn btn-outline-primary btn-block">Submit</button>
+                    <button className="btn btn-outline-primary btn-block" onClick={this.handleSubmit}>Submit</button>
                     <button className="btn btn-outline-default btn-block">Reset</button>
                 </div>
                 <div className="col-sm-6">
                     <label>All actors list
-            <NavLink style={linkStyle} to="/new-actor">Create new actor</NavLink>
+                    <NavLink style={linkStyle} to="/new-actor">Create new actor</NavLink>
                     </label>
                     <ul className="list-group">
                         <li className="list-group-item d-flex justify-content-between align-items-center">
@@ -92,8 +98,11 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        fetchActors: (name) => {
+        fetchActors: () => {
             dispatch(fetchActors());
+        },
+        createMovie: (movie) => {
+            dispatch(createMovie(movie));
         }
     };
 };

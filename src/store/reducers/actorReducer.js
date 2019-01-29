@@ -1,5 +1,6 @@
 const initialState = {
-
+  actors: [],
+  loading: false
 }
 
 export default (state = initialState, { type, payload }) => {
