@@ -1,26 +1,27 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter, Switch, Route } from 'react-router-dom';
+
+import Header from './components/layouts/Header';
+import Home from './components/Home';
+import NewMovie from './components/movies/NewMovie';
+import EditMovie from './components/movies/EditMovie';
+import NewActor from './components/actors/NewActor';
+import './assets/css/bootstrap.min.css';
 
 class App extends Component {
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
+      <BrowserRouter>
+        <div className="App">
+          <Header />
+          <Switch>
+            <Route path='/' exact component={Home} />
+            <Route path='/new-movie' component={NewMovie} />
+            <Route path='/new-actor' component={NewActor} />
+            <Route path='/edit-movie' component={EditMovie} />
+          </Switch>
+        </div>
+      </BrowserRouter>
     );
   }
 }
