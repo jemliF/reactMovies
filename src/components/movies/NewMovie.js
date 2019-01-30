@@ -8,11 +8,12 @@ class NewMovie extends Component {
         super(props);
         this.state = {
             newMovie: {
-                title: null,
-                releaseDate: null,
-                description: null,
+                title: '',
+                releaseDate: new Date(),
+                description: '',
                 actors: []
-            }
+            },
+            actors: []
         }
     }
     componentWillMount() {
@@ -42,7 +43,7 @@ class NewMovie extends Component {
                 <div className="col-sm-6">
                     <div>
                         <label className="form-control-label" htmlFor="title">Title</label>
-                        <input className="form-control" id="title" name="title" type="text" required minLength="4" onChange={this.handleChange} />
+                        <input className="form-control" id="title" name="title" type="text" required minLength="4" onChange={this.handleChange} value={this.state.newMovie.title} />
                         <div>
                             <div className="text-danger">Title is required!</div>
                             <div className="text-danger">Title must be at least 4 characters long.</div>
@@ -50,11 +51,11 @@ class NewMovie extends Component {
                     </div>
                     <div className="form-group">
                         <label className="form-control-label" htmlFor="release-date">Release Date</label>
-                        <input className="form-control" id="releaseDate" name="releaseDate" type="date" onChange={this.handleChange} />
+                        <input className="form-control" id="releaseDate" name="releaseDate" type="date" onChange={this.handleChange} value={this.state.newMovie.releaseDate} />
                     </div>
                     <div className="form-group">
                         <label className="form-control-label" htmlFor="description">Description</label>
-                        <textarea className="form-control" id="description" name="description" rows="3" minLength="10" onChange={this.handleChange}>
+                        <textarea className="form-control" id="description" name="description" rows="3" minLength="10" onChange={this.handleChange} value={this.state.newMovie.description}>
                         </textarea>
                         <div >
                             <div className="text-danger">Description is required!</div>
