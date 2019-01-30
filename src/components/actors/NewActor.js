@@ -29,12 +29,6 @@ class NewActor extends Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-
-  };
-};
-
 const mapDispatchToProps = (dispatch) => {
   return {
     createActor: (actor) => {
@@ -43,4 +37,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(NewActor);
+export default connect(null, mapDispatchToProps)(NewActor);

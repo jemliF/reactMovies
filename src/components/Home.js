@@ -7,7 +7,7 @@ class Home extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      movies: []
+
     }
   }
   componentWillMount() {
@@ -20,24 +20,25 @@ class Home extends Component {
   }
 
   componentDidUpdate() {
-    console.log('componentDidMount');
+    console.log('componentDidUpdate');
   }
 
   componentWillReceiveProps(newProps) {
-    console.log(newProps);
+    console.log('componentWillReceiveProps');
     /* this.propsUpdates.next(newProps) */
   }
   render() {
-    let movies = this.props.movies;
+    /* let movies = this.props.movies; */
     return (
       <div className="row" >
-        <MovieList movies={movies}></MovieList>
+        <MovieList movies={this.props.movies}></MovieList>
       </div>
     )
   }
 }
 
 const mapStateToProps = (state) => {
+  console.log(state);
   return {
     movies: state.movies
   };
