@@ -1,6 +1,5 @@
 const initialState = {
     movies: [],
-    actors: [],
     loading: false
 }
 
@@ -8,27 +7,24 @@ export default (state = initialState, { type, payload }) => {
     switch (type) {
 
         case 'CREATE_MOVIE_STARTED':
-            state = { ...state, loading: true }
-            break;
+            return { ...state, loading: true }
 
         case 'CREATE_MOVIE_SUCCESS':
-            state = { ...state, loading: false }
-            break;
+            const movies = state.movies;
+            movies.push(payload);
+            return { ...state, movies, loading: false }
 
         case 'EDIT_MOVIE':
-            state = { ...state }
-            break;
+            return { ...state }
 
         case 'FETCH_MOVIES_SUCCESS':
-            state = { ...state, movies: payload, loading: false }
-            break;
+            return { ...state, movies: payload, loading: false }
 
         case 'FETCH_MOVIES_STARTED':
-            state = { ...state, loading: true }
-            break;
+            return { ...state, loading: true }
 
         default:
-            break;
+            return state;
     }
-    return state;
+
 }

@@ -16,17 +16,38 @@ class NewMovie extends Component {
             actors: []
         }
     }
+
+    componentWillReceiveProps(newProps) {
+        console.log('componentWillReceiveProps', newProps, this.props);
+        /* this.propsUpdates.next(newProps) */
+        if (newProps.error) {
+            alert(newProps.error);
+        }
+        if (newProps.movies && newProps.movies.length > this.props.movies.length) {
+            this.props.history.push('/');
+        }
+    }
+
     componentWillMount() {
         console.log('componentWillMount');
         this.props.fetchActors();
     }
     handleChange = (event) => {
-        this.setState({...this.state, newMovie: {...this.state.newMovie, [event.target.id]: event.target.value} });
+        this.setState({ newMovie: { ...this.state.newMovie, [event.target.id]: event.target.value } });
     }
     handleSubmit = (event) => {
         event.preventDefault();
         this.props.createMovie(this.state.newMovie);
-        this.props.history.push('/')
+    }
+    onAddActorClick = (actor) => {
+        console.log(actor, this.state.newMovie);
+        const actors = this.state.newMovie.actors;
+        actors.push(actor);
+        this.setState({ ...this.state, newMovie: { ...this.state.newMovie, actors } });
+    }
+    componentDidCatch(error, info) {
+        console.log('componentDidCatch');
+        console.error(error, info);
     }
     render() {
         const formStyle = {
@@ -65,8 +86,8 @@ class NewMovie extends Component {
                     <label>Actors</label>
                     <ul className="list-group">
                         {
-                            this.props.actors && this.props.actors.map(actor => {
-                                return <li className="list-group-item d-flex justify-content-between align-items-center">
+                            this.state.actors && this.state.newMovie.actors.map(actor => {
+                                return <li key={actor._id} className="list-group-item d-flex justify-content-between align-items-center">
                                     {actor.firstName + '' + actor.lastName}
                                     <span className="badge badge-pill badge-primary" style={cursorStyle}>Remove</span>
                                 </li>
@@ -81,9 +102,14 @@ class NewMovie extends Component {
                     <NavLink style={linkStyle} to="/new-actor">Create new actor</NavLink>
                     </label>
                     <ul className="list-group">
-                        <li className="list-group-item d-flex justify-content-between align-items-center">
-                            <span className="badge badge-pill badge-primary" style={cursorStyle}>Add</span>
-                        </li>
+                        {
+                            this.props.actors && this.props.actors.map(actor => {
+                                return <li key={actor._id} className="list-group-item d-flex justify-content-between align-items-center">
+                                    {actor.firstName + '' + actor.lastName}
+                                    <span className="badge badge-pill badge-primary" style={cursorStyle} onClick={() => this.onAddActorClick(actor)}>Add</span>
+                                </li>
+                            })
+                        }
                     </ul>
                 </div>
             </form>
@@ -93,7 +119,9 @@ class NewMovie extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        actors: state.actors
+        actors: state.actorReducer.actors,
+        movies: state.movieReducer.movies,
+        error: state.commonReducer.error
     };
 };
 

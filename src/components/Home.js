@@ -7,40 +7,44 @@ class Home extends Component {
   constructor(props) {
     super(props);
     this.state = {
-
+      movies: []
     }
   }
   componentWillMount() {
     console.log('componentWillMount');
-    this.props.fetchMovies();
   }
 
   componentDidMount() {
     console.log('componentDidMount');
+    this.props.fetchMovies();
   }
 
   componentDidUpdate() {
     console.log('componentDidUpdate');
+    // 
   }
 
   componentWillReceiveProps(newProps) {
-    console.log('componentWillReceiveProps');
+    console.log('componentWillReceiveProps', newProps);
     /* this.propsUpdates.next(newProps) */
+    if(newProps.error && newProps.error.type === 'FETCH_MOVIES') {
+      alert(newProps.error.err);
+    }
   }
   render() {
     /* let movies = this.props.movies; */
     return (
-      <div className="row" >
         <MovieList movies={this.props.movies}></MovieList>
-      </div>
     )
   }
 }
 
 const mapStateToProps = (state) => {
-  console.log(state);
+  console.log(state.movieReducer.movies);
   return {
-    movies: state.movies
+    movies: state.movieReducer.movies,
+    loading: state.movieReducer.loading,
+    error: state.commonReducer.error
   };
 };
 

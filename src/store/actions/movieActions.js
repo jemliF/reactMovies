@@ -5,7 +5,7 @@ export const createMovie = (payload) => {
         dispatch(createMoviesStarted(payload));
         axios.post('http://localhost:5000/api/v1/movies', payload)
             .then((res) => {
-                dispatch(createMovieSuccess(res.data));
+                dispatch(createMovieSuccess(payload));
             },
                 (err) => {
                     dispatch(handleError(err));
@@ -17,18 +17,15 @@ export const editMovie = (payload) => ({
     type: 'EDIT_MOVIE',
     payload
 });
-export const fetchMovies = (payload) => {
-    return (dispatch, getState) => {
-        dispatch(fetchMoviesStarted(payload));
-        axios.get('http://localhost:5000/api/v1/movies')
-            .then((res) => {
-                dispatch(fetchMoviesSuccess(res.data));
-            },
-                (err) => {
-                    dispatch(handleError(err));
-                });
-
-    }
+export const fetchMovies = (payload) => (dispatch, getState) => {
+    dispatch(fetchMoviesStarted(payload));
+    return axios.get('http://localhost:5000/api/v1/movies')
+        .then((res) => {
+            dispatch(fetchMoviesSuccess(res.data));
+        },
+            (err) => {
+                dispatch(handleError({type: 'FETCH_MOVIES',err}));
+            });
 };
 
 export const fetchMoviesSuccess = (payload) => ({
