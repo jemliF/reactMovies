@@ -1,4 +1,5 @@
 import axios from 'axios';
+import store from '../index';
 import { handleError } from './commonActions';
 export const createMovie = (payload) => {
     return (dispatch, getState) => {
@@ -17,15 +18,19 @@ export const editMovie = (payload) => ({
     type: 'EDIT_MOVIE',
     payload
 });
-export const fetchMovies = (payload) => (dispatch, getState) => {
-    dispatch(fetchMoviesStarted(payload));
-    return axios.get('http://localhost:5000/api/v1/movies')
-        .then((res) => {
-            dispatch(fetchMoviesSuccess(res.data));
-        },
-            (err) => {
-                dispatch(handleError({type: 'FETCH_MOVIES',err}));
-            });
+export const fetchMovies = () => {
+    store.dispatch(fetchMoviesStarted());
+    return new Promise((resolve, reject) => {
+        axios.get('http://localhost:5000/api/v1/movies')
+            .then((res) => {
+                store.dispatch(fetchMoviesSuccess(res.data));
+                resolve(res.data);
+            },
+                (err) => {
+                    store.dispatch(handleError({ type: 'FETCH_MOVIES', err }));
+                    reject(err);
+                });
+    });
 };
 
 export const fetchMoviesSuccess = (payload) => ({

@@ -16,7 +16,11 @@ class Home extends Component {
 
   componentDidMount() {
     console.log('componentDidMount');
-    this.props.fetchMovies();
+    fetchMovies()
+      .then(res => {
+        console.log(res);
+        console.table(res);
+      }, err => console.error(err));
   }
 
   componentDidUpdate() {
@@ -27,14 +31,14 @@ class Home extends Component {
   componentWillReceiveProps(newProps) {
     console.log('componentWillReceiveProps', newProps);
     /* this.propsUpdates.next(newProps) */
-    if(newProps.error && newProps.error.type === 'FETCH_MOVIES') {
+    if (newProps.error && newProps.error.type === 'FETCH_MOVIES') {
       alert(newProps.error.err);
     }
   }
   render() {
     /* let movies = this.props.movies; */
     return (
-        <MovieList movies={this.props.movies}></MovieList>
+      <MovieList movies={this.props.movies}></MovieList>
     )
   }
 }

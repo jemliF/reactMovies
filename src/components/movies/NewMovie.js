@@ -29,8 +29,14 @@ class NewMovie extends Component {
     }
 
     componentWillMount() {
-        console.log('componentWillMount');
+        /* console.log('componentWillMount'); */
         this.props.fetchActors();
+    }
+    componentDidUpdate(prevProps) {
+        console.log('componentDidUpdate', prevProps, this.props);
+        if (this.props.movies && prevProps.movies && this.props.movies.length > prevProps.movies.length) {
+            this.props.history.push('/');
+        }
     }
     handleChange = (event) => {
         this.setState({ newMovie: { ...this.state.newMovie, [event.target.id]: event.target.value } });
